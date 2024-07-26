@@ -9,7 +9,7 @@
             <h3>龋齿检测平台</h3>
         </div>
 
-        <el-dropdown>
+        <el-dropdown v-if="login">
             <div class="avatar">
                 <el-avatar size="small"></el-avatar>
                 <p>{{ name }}</p>
@@ -26,6 +26,16 @@
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
+        <el-dropdown v-else>
+            <div class="avatar">
+                <el-avatar size="small"></el-avatar>
+                <p>请登录</p>
+                <el-icon size="18px">
+                    <ArrowDown />
+                </el-icon>
+            </div>
+        </el-dropdown>
+
     </div>
 
 </template>
@@ -34,9 +44,9 @@
 import { Search, ArrowDown } from '@element-plus/icons-vue';
 import logo from '../icon/logo.vue';
 defineProps<{
-    name:string
+    name:string,
+    login:boolean
 }>();
-
 
 
 

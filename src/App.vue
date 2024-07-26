@@ -2,7 +2,7 @@
   <div class="common-layout">
     <el-container>
       <el-header style="height: auto">
-        <Header :name></Header>
+        <Header  :name login></Header>
       </el-header>
       <el-container>
         <el-aside width="250px">
