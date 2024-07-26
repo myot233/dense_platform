@@ -5,17 +5,17 @@
             <el-step title="上传图片" />
             <el-step title="等待结果" />
         </el-steps>
-        <div style="margin: 16px;">
-            <div v-if="step == 0">
-                <el-form>
-                    <el-form-item label="选择一位医生">
-                        <el-select v-model="form.doctor">
-                            <el-option v-for="doctor in doctors" :label="doctor"></el-option>
+        <div style="margin: 16px">
+            <div v-if="step == 0" style="display: flex;justify-content:center">
+                <el-form style="min-width: 600px">
+                    <el-form-item  label="选择一位医生">
+                        <el-select   style="text-align: end" placeholder="请选择" v-model="form.doctor">
+                            <el-option  v-for="doctor in doctors" :label="doctor"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
             </div>
-            <div v-if="step == 1">
+            <div v-if="step == 1" style="display: flex;justify-content:center">
                 <el-form>
                     <el-form-item label="上传图片:">
                         <Upload></Upload>
@@ -30,7 +30,12 @@
                 ></el-result>
             </div>
         </div>
-        <el-button style="margin-left: 85%;" @click="()=> {if(step++ >= 2) router.push('home') }">{{ buttonText }}</el-button>
+      <div style="display: grid; grid-template-columns:auto 1fr auto;margin:auto 25%">
+        <el-button v-if="step >= 1" @click="()=> { step-- }">上一步</el-button>
+        <div v-else></div>
+        <div></div>
+        <el-button @click="()=> {if(step++ >= 2) router.push('home') }">{{ buttonNextText }}</el-button>
+      </div>
     </el-card>
 </template>
 
@@ -43,12 +48,14 @@ const router = useRouter();
 const form = ref({
     doctor: ""
 });
-const buttonText = computed(()=>{
+const buttonNextText = computed(()=>{
     if(step.value == 2){
         return "完成"
     }
     return "下一步"
 })
+
+
 const step = ref(0);
 const doctors = ref(["陈医生", "赵医生", "徐医生"]);
 </script>
