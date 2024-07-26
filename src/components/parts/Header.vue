@@ -4,51 +4,70 @@
         <div class="title">
             <el-icon size="2em" style="margin: auto 15px;">
                 <logo></logo>
-                
+
             </el-icon>
             <h3>龋齿检测平台</h3>
         </div>
 
-        <el-dropdown v-if="login">
-            <div class="avatar">
-                <el-avatar size="small"></el-avatar>
-                <p>{{ name }}</p>
+
+        <div class="avatar" v-if="login">
+            <el-avatar size="small"></el-avatar>
+            <el-text>{{ name }}</el-text>
+            <el-dropdown>
                 <el-icon size="18px">
                     <ArrowDown />
                 </el-icon>
-            </div>
-            <template #dropdown>
-                <el-dropdown-menu>
-                   <el-dropdown-item>个人信息</el-dropdown-item>
-                   <el-dropdown-item>我的报告</el-dropdown-item>
-                
-                   <el-dropdown-item divided>注销</el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
-        <el-dropdown v-else>
-            <div class="avatar">
-                <el-avatar size="small"></el-avatar>
-                <p>请登录</p>
-                <el-icon size="18px">
-                    <ArrowDown />
-                </el-icon>
-            </div>
-        </el-dropdown>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item>个人信息</el-dropdown-item>
+                        <el-dropdown-item>我的报告</el-dropdown-item>
+
+                        <el-dropdown-item divided>注销</el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
+        </div>
+        <div @click="userLogin" style="cursor: pointer;" class="avatar" v-else>
+            <el-avatar size="small"></el-avatar>
+            <el-text >未登录</el-text>
+            <el-icon size="18px">
+                <ArrowDown />
+            </el-icon>
+        </div>
+
+
 
     </div>
+    <Login v-model="showDialogVariable"></Login>
 
 </template>
 
 <script setup lang="ts">
 import { Search, ArrowDown } from '@element-plus/icons-vue';
+import { ref } from 'vue';
 import logo from '../icon/logo.vue';
-defineProps<{
-    name:string,
-    login:boolean
-}>();
+import Login from '../pages/Login.vue';
+
+const showDialogVariable = ref(false);
+export interface HeaderProps {
+    name: string,
+    login?: boolean
+}
+
+const props = withDefaults(defineProps<HeaderProps>(), {
+    name: "",
+    login: false,
+});
 
 
+function userLogin() {
+    console.log("log in")
+    showDialog();
+}
+
+function showDialog() {
+    showDialogVariable.value = true;
+}
 
 </script>
 
@@ -67,9 +86,9 @@ defineProps<{
 
 .avatar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: baseline;
     align-items: center;
-    flex-wrap: nowrap;
+
 }
 
 .title {
