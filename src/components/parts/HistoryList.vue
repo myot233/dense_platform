@@ -1,66 +1,86 @@
 <template>
-    <el-table :data="reports">
-    <el-table-column prop="reportId" label="报告号" />
-    <el-table-column prop="doctor" label="负责医生" />
-    <el-table-column label="状态" >
-        <template #default="scope">
-            <el-popover effect="light" trigger="hover" placement="top" width="auto">
+  <el-table :data="reports">
+    <el-table-column prop="reportId" label="报告号"/>
+    <el-table-column prop="doctor" label="负责医生"/>
+    <el-table-column label="状态">
+      <template #default="scope">
+        <el-popover effect="light" trigger="hover" placement="top" width="auto">
           <template #reference>
-            <el-tag>{{ scope.row.status }}</el-tag>
+            <el-tag :type="color(scope.row)">{{ scope.row.status }}</el-tag>
           </template>
         </el-popover>
-        </template>
+      </template>
     </el-table-column>
-    
+
     <el-table-column>
-        <template #default="scope">
+      <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
           查看报告
         </el-button>
         <el-button
-          size="small"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)"
+            size="small"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
         >
           删除报告
         </el-button>
       </template>
-    </el-table-column>  
-    </el-table>
+    </el-table-column>
+  </el-table>
 </template>
 
 
 <script lang="ts" setup>
-
 enum Status {
-    Checking = "检测中",
-    Completed = "检测完成",
-    Abnormality= "检测异常",
-    Error = "检测失败",
+  Checking = "检测中",
+  Completed = "检测完成",
+  Abnormality = "检测异常",
+  Error = "检测失败",
 
 }
 
+
 type Report = {
-    reportId:number,
-    doctor:string,
-    status:Status,
+  reportId: number,
+  doctor: string,
+  status: Status,
 }
 
 
 import {ref} from "vue";
-    const reports = ref<Report[]>([
-        {
-            reportId:114514,
-            doctor:"陈医生",
-            status:Status.Checking
-        }
-    ]);
 
-    function handleEdit(index:number,row:Report){
+const reports = ref<Report[]>([
+  {
+    reportId: 114514,
+    doctor: "陈医生",
+    status: Status.Checking,
+  }, {
+    reportId: 2144,
+    doctor: "6a105d51",
+    status: Status.Completed
 
-    }
+  }
+]);
 
-    function handleDelete(index:number,row:Report){
+const color = (scope: Report) => {
+  switch (scope.status) {
+    case Status.Checking:
+      return "primary";
+    case Status.Completed:
+      return "success";
+    case Status.Abnormality:
+      return "warning";
+    case Status.Error:
+      return "danger";
+  }
+}
+
+
+function handleEdit(index: number, row: Report) {
+
+}
+
+function handleDelete(index: number, row: Report) {
 
 }
 
