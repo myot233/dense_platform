@@ -14,7 +14,7 @@
 
     <el-table-column>
       <template #default="scope">
-        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+        <el-button size="small" @click="handleOpen(scope.$index, scope.row)">
           查看报告
         </el-button>
         <el-button
@@ -47,7 +47,9 @@ type Report = {
 }
 
 
-import {ref} from "vue";
+import {inject, ref, type Ref} from "vue";
+import type { Router } from "vue-router";
+
 
 const reports = ref<Report[]>([
   {
@@ -75,9 +77,11 @@ const color = (scope: Report) => {
   }
 }
 
+const path = inject<Ref<string>>("path")!;
 
-function handleEdit(index: number, row: Report) {
-
+function handleOpen(index: number, row: Report) {
+  console.log(`${index} at ${row}`)
+    path.value = `/${row.reportId.toString()}`;
 }
 
 function handleDelete(index: number, row: Report) {

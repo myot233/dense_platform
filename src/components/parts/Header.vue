@@ -22,7 +22,7 @@
                         <el-dropdown-item>个人信息</el-dropdown-item>
                         <el-dropdown-item>我的报告</el-dropdown-item>
 
-                        <el-dropdown-item divided>注销</el-dropdown-item>
+                        <el-dropdown-item divided @click="logout()">注销</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -43,11 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import { Search, ArrowDown } from '@element-plus/icons-vue';
-import { ref } from 'vue';
+import { ArrowDown } from '@element-plus/icons-vue';
+import { inject, ref } from 'vue';
 import logo from '../icon/logo.vue';
 import Login from '../pages/Login.vue';
-
+import type { VueCookies } from 'vue-cookies';
+const $cookies = inject<VueCookies>('$cookies');
 const showDialogVariable = ref(false);
 export interface HeaderProps {
     name: string,
@@ -60,13 +61,23 @@ const props = withDefaults(defineProps<HeaderProps>(), {
 });
 
 
+
 function userLogin() {
-    console.log("log in")
+
     showDialog();
 }
 
 function showDialog() {
     showDialogVariable.value = true;
+}
+
+function logout(){
+    
+    if($cookies?.isKey("token")){
+        $cookies.remove("token");
+    }
+    window.location.reload();
+    
 }
 
 </script>
