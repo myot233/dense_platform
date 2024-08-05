@@ -26,7 +26,7 @@
                 <el-input v-model="registerform.password" type="password" />
             </el-form-item>
             <el-form-item label="重复密码:">
-                <el-input v-model="registerform.password" type="password" />
+                <el-input v-model="registerform.password_repeat" type="password" />
             </el-form-item>
             <!-- <el-form-item label="验证码:" style="display: flex;">
                 <el-input v-model="registerform.verify"> </el-input>
@@ -62,7 +62,7 @@ interface RegisterForm {
 }
 
 
-import { login } from "@/api";
+import { login, register } from "@/api";
 
 
 import { ref, computed, watch, inject } from "vue"
@@ -93,12 +93,33 @@ const registerform = ref<RegisterForm>({
 });
 
 const loginButtonClick = () => {
-    if (isLogin) {
-
+    if (isLogin.value) {
         if (!$cookies?.isKey("token")) {
-            login(loginform.value.account, loginform.value.password);
-            window.location.reload();
+
+            login(loginform.value.account, loginform.value.password).then(
+                (resp) => {
+                    if (resp.data.code == "0") {
+                        document.cookie = `token=${resp.data.token}`
+                        window.location.reload();
+                    } 
+                
+                }
+            )
+
+        }else{
+        
         }
+    }else{
+        if ($cookies?.isKey("token")) return;
+        register(registerform.value.account,registerform.value.password).then(
+                resp=>{
+                    if (resp.data.code == "0") {
+                        document.cookie = `token=${resp.data.token}`
+                        window.location.reload();
+                    } 
+                }
+            )
+        
     }
 }
 

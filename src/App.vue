@@ -69,7 +69,7 @@ if($cookies?.isKey("token")){
     login.value = true;
     const token = $cookies.get("token");
     getUserInfo(token).then(resp=>{
-      name.value = resp.data.name;
+      name.value = resp.data.form.name;
      
     }
 

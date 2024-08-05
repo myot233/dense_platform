@@ -11,7 +11,7 @@
 
 
         <div class="avatar" v-if="login">
-            <el-avatar size="small"></el-avatar>
+            <el-avatar fit="cover" size="small" :src="src"></el-avatar>
             <el-text>{{ name }}</el-text>
             <el-dropdown>
                 <el-icon size="18px">
@@ -48,8 +48,11 @@ import { inject, ref } from 'vue';
 import logo from '../icon/logo.vue';
 import Login from '../pages/Login.vue';
 import type { VueCookies } from 'vue-cookies';
+import { getAvatar } from '@/api';
+import { base64url } from 'jose';
 const $cookies = inject<VueCookies>('$cookies');
 const showDialogVariable = ref(false);
+const src = ref<string>();
 export interface HeaderProps {
     name: string,
     login?: boolean
@@ -60,6 +63,15 @@ const props = withDefaults(defineProps<HeaderProps>(), {
     login: false,
 });
 
+
+if($cookies?.isKey("token")){
+    getAvatar($cookies.get("token")).then(x=>{
+        console.log(x)
+        const blob = x.data;
+        const imageUrl = URL.createObjectURL(blob);
+        src.value = imageUrl;
+    })
+}
 
 
 function userLogin() {
@@ -84,11 +96,15 @@ function logout(){
 
 
 <style scoped>
-.avatar * {
+.avatar .el-avatar {
     margin-right: 8px;
 
 }
 
+.avatar .el-text {
+    margin-right: 8px;
+
+}
 
 .container {
     display: grid;

@@ -2,6 +2,8 @@
     <el-upload
       class="avatar-uploader"
       :show-file-list="false"
+      action="http://localhost:24552/api/uploadAvatar"
+      :headers="{token:$cookies.get('token')}"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload"
     >
@@ -31,7 +33,7 @@
     if (rawFile.type in ["image/jpeg","image/png","image/webp"]) {
       ElMessage.error('头像图片格式不符合要求')
       return false
-    } else if (rawFile.size / 1024 / 1024 > 4) {
+    } else if (rawFile.size / 1024 / 1024 > 114514) {
       ElMessage.error('头像图片大小不能大于4MB')
       return false
     }

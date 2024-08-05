@@ -35,7 +35,7 @@
                     <el-input v-model="form.email" />
                 </el-form-item>
                 <el-form-item label="居住地址">
-                    <el-input v-model="form.email" />
+                    <el-input v-model="form.address" />
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="onSubmit">保存信息</el-button>
@@ -47,23 +47,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import Upload from "../parts/Upload.vue"
+import { type VueCookies } from "vue-cookies";
+import { getUserInfo, submitUserInfo } from "@/api";
 let imageUrl = ref();
-
+const $cookies = inject<VueCookies>("$cookies")
 const form = ref({
     name: "",
     sex: "",
     birth: "",
     phone:"",
     email:"",
-    password:""
+    password:"",
+    address:""
 
+});
+
+getUserInfo($cookies?.get("token")).then(x=>{
+    form.value = x.data.form
 });
 
 
 function onSubmit(){
-
+    submitUserInfo($cookies?.get("token"),form).then(x=>{
+        console.log(x)   
+    })
 }
 
 </script>
