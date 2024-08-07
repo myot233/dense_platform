@@ -43,3 +43,21 @@ export async function register(userName:string,passWord:string){
         password:passWord
     })
 }
+
+
+export async function submitReport(token:string,doctor:string,file:string) {
+    return await instance.post("submitReport",{
+        token:token,
+        doctor:doctor,
+        fileId:file
+    })
+    
+}
+
+
+export async function getReports(token:string){
+    return await instance.post("getReports",{
+        token:token,
+    })
+    
+}

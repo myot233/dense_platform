@@ -2,7 +2,7 @@
     <el-upload
       class="avatar-uploader"
       :show-file-list="false"
-      action="http://localhost:24552/api/uploadAvatar"
+      :action="uploadUrl"
       :headers="{token:$cookies.get('token')}"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload"
@@ -16,17 +16,22 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { Plus } from '@element-plus/icons-vue'
-  
+  import { defineEmits } from 'vue'
   import type { UploadProps } from 'element-plus'
   
   const imageUrl = ref('')
-  
+  defineProps<{
+    uploadUrl:string
+  }>();
+  const emit = defineEmits<{
+    (e: 'onSuccess', response: any): void
+  }>()
   const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response,
     uploadFile
   ) => {
     imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-    
+    emit("onSuccess",response)
   }
   
   const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

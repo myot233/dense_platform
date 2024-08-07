@@ -2,11 +2,11 @@
   <div class="common-layout">
     <el-container>
       <el-header style="height: auto">
-        <Header  :name :login></Header>
+        <Header :name :login></Header>
       </el-header>
       <el-container>
         <el-aside width="250px">
-          <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
+          <el-menu ref="menu"  default-active="1" class="el-menu-vertical-demo" @select="handleSelect" >
             <el-menu-item index="1">
               <el-icon>
                 <House></House>
@@ -22,19 +22,19 @@
             <el-sub-menu index="3">
               <template #title>
                 <el-icon>
-                  <Notification />
+                  <Notification/>
                 </el-icon>
                 <span>检测管理</span>
               </template>
               <el-menu-item index="3-1">
                 <el-icon>
-                  <PieChart />
+                  <PieChart/>
                 </el-icon>
                 <span>龋齿检测</span>
               </el-menu-item>
               <el-menu-item index="3-2">
                 <el-icon>
-                  <Clock />
+                  <Clock/>
                 </el-icon>
                 <span>历史记录</span>
               </el-menu-item>
@@ -56,33 +56,42 @@
 
 <script setup lang="ts">
 import Header from './components/parts/Header.vue';
-import { House, User, Notification, PieChart, Clock } from '@element-plus/icons-vue';
-import { ref,inject } from 'vue';
-import { type VueCookies } from 'vue-cookies';
-import { useRoute, useRouter } from 'vue-router';
-import { getUserInfo } from './api';
+import {House, User, Notification, PieChart, Clock} from '@element-plus/icons-vue';
+import {ref, inject, onMounted} from 'vue';
+import {type VueCookies} from 'vue-cookies';
+import {useRoute, useRouter} from 'vue-router';
+import {getUserInfo} from './api';
+import {ElMessage} from 'element-plus';
+import { ElMenu} from "element-plus";
+
 const router = useRouter();
 const name = ref("")
 const login = ref(false)
 const $cookies = inject<VueCookies>('$cookies');
-if($cookies?.isKey("token")){
-    login.value = true;
-    const token = $cookies.get("token");
-    getUserInfo(token).then(resp=>{
-      name.value = resp.data.form.name;
-     
-    }
+const menu = ref(null)
 
-    )
 
-  }
+if ($cookies?.isKey("token")) {
+  login.value = true;
+  const token:string = $cookies.get("token");
+  getUserInfo(token).then(resp => {
+        name.value = resp.data.form.name;
+        
+      }
+  )
 
+}
 
 
 router.push("home");
 
 
-function handleSelect(index:string) {
+function handleSelect(index: string) {
+  if (!$cookies?.isKey("token")) {
+    ElMessage.error("请登录后使用本系统");
+
+    return;
+  }
   // 直接把index改成对应的route应该也可以
   switch (index) {
     case "1":
@@ -99,7 +108,6 @@ function handleSelect(index:string) {
       break;
   }
 }
-
 
 
 </script>

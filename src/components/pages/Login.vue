@@ -22,6 +22,12 @@
             <el-form-item label="账号:">
                 <el-input v-model="registerform.account"></el-input>
             </el-form-item>
+          <el-form-item label="类别:">
+            <el-select v-model="registerform.account">
+              <el-option label="病人" value="Patient"></el-option>
+              <el-option label="医生" value="Doctor"></el-option>
+            </el-select>
+          </el-form-item>
             <el-form-item label="密码:">
                 <el-input v-model="registerform.password" type="password" />
             </el-form-item>
@@ -88,6 +94,7 @@ const loginform = ref<LoginForm>({
 const registerform = ref<RegisterForm>({
     account: "",
     password: "",
+  
     password_repeat: "",
     verify: ""
 });

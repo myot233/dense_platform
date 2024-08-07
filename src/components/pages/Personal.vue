@@ -4,7 +4,7 @@
 
             <div style="display: flex;flex-basis: content;">
                 <el-text style="margin-right: 16px;" size="large">头像:</el-text>
-                <Upload></Upload>
+                <Upload upload-url="http://localhost:24552/api/uploadAvatar"></Upload>
             </div>
 
         </el-card>

@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <el-page-header @back="goBack">
+    <el-page-header @back="goBack" >
       <template #content>
         <span class="text-large font-600 mr-3" v-if="routePath != ''"> {{routePath.replace("/","")}} </span>
       </template>
