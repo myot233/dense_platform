@@ -2,12 +2,12 @@
     <el-upload
       class="avatar-uploader"
       :show-file-list="false"
-      :action="uploadUrl"
+      action="http://localhost:24552/api/image"
       :headers="{token:$cookies.get('token')}"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload"
     >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+      <img v-if="imageUrl" :src="imageUrl" class="avatar"  alt=""/>
       <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload>
   </template>
@@ -20,9 +20,7 @@
   import type { UploadProps } from 'element-plus'
   
   const imageUrl = ref('')
-  defineProps<{
-    uploadUrl:string
-  }>();
+
   const emit = defineEmits<{
     (e: 'onSuccess', response: any): void
   }>()

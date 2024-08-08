@@ -6,10 +6,10 @@
         </div>
         <el-form label-width="auto" v-if="isLogin">
             <el-form-item label="账号:">
-                <el-input v-model="loginform.account"></el-input>
+                <el-input v-model="loginForm.account"></el-input>
             </el-form-item>
             <el-form-item label="密码:">
-                <el-input v-model="loginform.password" type="password" />
+                <el-input v-model="loginForm.password" type="password" />
             </el-form-item>
             <!-- <div style="display: flex;">
                 <el-text style="margin-right: 12px;">验证码:</el-text>
@@ -20,22 +20,22 @@
         </el-form>
         <el-form label-width="auto" v-else>
             <el-form-item label="账号:">
-                <el-input v-model="registerform.account"></el-input>
+                <el-input v-model="registerForm.account"></el-input>
             </el-form-item>
           <el-form-item label="类别:">
-            <el-select v-model="registerform.account">
-              <el-option label="病人" value="Patient"></el-option>
-              <el-option label="医生" value="Doctor"></el-option>
+            <el-select v-model="registerForm.type">
+              <el-option label="病人" :value="UserType.Patient"></el-option>
+              <el-option label="医生" :value="UserType.Doctor"></el-option>
             </el-select>
           </el-form-item>
             <el-form-item label="密码:">
-                <el-input v-model="registerform.password" type="password" />
+                <el-input v-model="registerForm.password" type="password" />
             </el-form-item>
             <el-form-item label="重复密码:">
-                <el-input v-model="registerform.password_repeat" type="password" />
+                <el-input v-model="registerForm.password_repeat" type="password" />
             </el-form-item>
             <!-- <el-form-item label="验证码:" style="display: flex;">
-                <el-input v-model="registerform.verify"> </el-input>
+                <el-input v-model="registerForm.verify"> </el-input>
                 <template #suffix>
                     <el-image></el-image>
                 </template>
@@ -54,15 +54,20 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-interface LoginForm {
+import {ElMessage} from "element-plus";
+
+interface loginForm {
     account: string,
     password: string,
     verify: string
 }
 
-interface RegisterForm {
+
+
+interface registerForm {
     account: string,
     password: string,
+    type:UserType,
     password_repeat: string,
     verify: string,
 }
@@ -73,6 +78,7 @@ import { login, register } from "@/api";
 
 import { ref, computed, watch, inject } from "vue"
 import type { VueCookies } from "vue-cookies";
+import {UserType} from "@/common";
 
 const centerDialogVisible = defineModel({ default: false })
 const isLogin = ref(true);
@@ -85,16 +91,16 @@ watch(centerDialogVisible, (value) => {
 const title = computed(() => isLogin ? "请登录" : "请注册")
 
 
-const loginform = ref<LoginForm>({
+const loginForm = ref<loginForm>({
     account: "",
     password: "",
     verify: "",
 });
 
-const registerform = ref<RegisterForm>({
+const registerForm = ref<registerForm>({
     account: "",
     password: "",
-  
+    type:UserType.Patient,
     password_repeat: "",
     verify: ""
 });
@@ -103,12 +109,14 @@ const loginButtonClick = () => {
     if (isLogin.value) {
         if (!$cookies?.isKey("token")) {
 
-            login(loginform.value.account, loginform.value.password).then(
+            login(loginForm.value.account, loginForm.value.password).then(
                 (resp) => {
                     if (resp.data.code == "0") {
                         document.cookie = `token=${resp.data.token}`
                         window.location.reload();
-                    } 
+                    }else{
+                      ElMessage.error(resp.data.message);
+                    }
                 
                 }
             )
@@ -118,7 +126,7 @@ const loginButtonClick = () => {
         }
     }else{
         if ($cookies?.isKey("token")) return;
-        register(registerform.value.account,registerform.value.password).then(
+        register(registerForm.value.account,registerForm.value.password,registerForm.value.type).then(
                 resp=>{
                     if (resp.data.code == "0") {
                         document.cookie = `token=${resp.data.token}`

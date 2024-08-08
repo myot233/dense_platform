@@ -18,7 +18,7 @@
             <div v-if="step == 1" style="display: flex;justify-content:center">
                 <el-form>
                     <el-form-item label="上传图片:">
-                        <Upload upload-url="http://localhost:24552/api/uploadImage" @on-success="(resp:any)=>{form.image = resp.fileId}"></Upload>
+                        <Uploads  @on-success="(resp:any)=>{form.image = resp.fileId}"></Uploads>
                     </el-form-item>
                 </el-form>
             </div>
@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import { ref, watch,computed } from "vue"
-import Upload from "../parts/Upload.vue";
+import Uploads from "../parts/Uploads.vue";
 import { useRouter } from "vue-router";
 import { submitReport } from "@/api";
 const router = useRouter();

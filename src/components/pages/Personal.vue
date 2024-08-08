@@ -4,7 +4,11 @@
 
             <div style="display: flex;flex-basis: content;">
                 <el-text style="margin-right: 16px;" size="large">头像:</el-text>
-                <Upload upload-url="http://localhost:24552/api/uploadAvatar"></Upload>
+                <Upload @onSuccess="response => uploadAvatar($cookies.get('token'),response.image).then(x=>{
+                  if(x.data.code == '0'){
+                    ElMessage.info('上传成功');
+                  }
+                })"></Upload>
             </div>
 
         </el-card>
@@ -21,12 +25,12 @@
                 </el-form-item>
                 <el-form-item label="性别">
                     <el-radio-group v-model="form.sex">
-                        <el-radio value="male">男性</el-radio>
-                        <el-radio value="female">女性</el-radio>
+                        <el-radio :value="UserSex.Male">男性</el-radio>
+                        <el-radio :value="UserSex.Female">女性</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="出生日期">
-                    <el-date-picker v-model="form.birth" type="date" placeholder="Pick a date" style="width: 100%" />
+                    <el-date-picker v-model="form.birth" type="date" placeholder="选择你的出生日期" value-format="YYYY-MM-DD" format="YYYY-MM-DD" style="width: 100%" />
                 </el-form-item>
                 <el-form-item label="联系方式">
                     <el-input v-model="form.phone" />
@@ -50,7 +54,10 @@
 import { inject, ref } from "vue";
 import Upload from "../parts/Upload.vue"
 import { type VueCookies } from "vue-cookies";
-import { getUserInfo, submitUserInfo } from "@/api";
+import { getUserInfo, submitUserInfo,uploadAvatar} from "@/api";
+import {UserSex} from "@/common";
+import {ElMessage} from "element-plus";
+
 let imageUrl = ref();
 const $cookies = inject<VueCookies>("$cookies")
 const form = ref({
@@ -74,6 +81,8 @@ function onSubmit(){
         console.log(x)   
     })
 }
+
+
 
 </script>
 

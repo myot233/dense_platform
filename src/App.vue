@@ -76,7 +76,7 @@ if ($cookies?.isKey("token")) {
   const token:string = $cookies.get("token");
   getUserInfo(token).then(resp => {
         name.value = resp.data.form.name;
-        
+          
       }
   )
 
@@ -89,7 +89,6 @@ router.push("home");
 function handleSelect(index: string) {
   if (!$cookies?.isKey("token")) {
     ElMessage.error("请登录后使用本系统");
-
     return;
   }
   // 直接把index改成对应的route应该也可以

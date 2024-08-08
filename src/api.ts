@@ -1,4 +1,5 @@
 import axios from "axios";
+import type {UserType} from "@/common";
 
 const instance = axios.create({
     baseURL: 'http://localhost:24552/api/',
@@ -26,6 +27,13 @@ export async function getAvatar(token:string) {
     },{responseType: 'blob'})
 }
 
+export async function uploadAvatar(token:string,image:number) {
+    return instance.post("submitAvatar",{
+        token:token,
+        id:image
+    })
+}
+
 export function saveUser(){
     
 }
@@ -37,10 +45,13 @@ export async function login(userName:string,passWord:string){
     })
 }
 
-export async function register(userName:string,passWord:string){
+
+
+export async function register(userName:string,passWord:string,type:UserType){
     return await instance.post("register",{
         username:userName,
-        password:passWord
+        password:passWord,
+        type:type,
     })
 }
 
