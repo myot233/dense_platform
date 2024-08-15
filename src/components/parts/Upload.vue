@@ -2,7 +2,7 @@
     <el-upload
       class="avatar-uploader"
       :show-file-list="false"
-      action="http://localhost:24552/api/image"
+      :action=" API_ADDRESS + '/api/image'"
       :headers="{token:$cookies.get('token')}"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload"
@@ -16,8 +16,8 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { Plus } from '@element-plus/icons-vue'
-  import { defineEmits } from 'vue'
   import type { UploadProps } from 'element-plus'
+  import {API_ADDRESS} from "@/common";
   
   const imageUrl = ref('')
 

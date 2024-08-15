@@ -1,8 +1,8 @@
 import axios from "axios";
-import type {UserType} from "@/common";
+import {API_ADDRESS, ImageType, type UserType} from "@/common";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:24552/api/',
+    baseURL: API_ADDRESS + '/api/',
     timeout: 1000,
 
   });
@@ -17,7 +17,7 @@ export async function getUserInfo(token:string) {
 export async function submitUserInfo(token:string,form:any) {
     return await instance.post("submitInfo",{
          token:token,
-         form:form.value
+         form:form
      })
  }
 
@@ -56,19 +56,40 @@ export async function register(userName:string,passWord:string,type:UserType){
 }
 
 
-export async function submitReport(token:string,doctor:string,file:string) {
+export async function submitReport(token:string,doctor:string,file:number[]) {
     return await instance.post("submitReport",{
         token:token,
         doctor:doctor,
-        fileId:file
+        images:file
     })
     
 }
 
+export async function getDoctors(token:string){
+    return await instance.post("doctors",{
+        token:token
+    })
+}
 
 export async function getReports(token:string){
     return await instance.post("getReports",{
         token:token,
     })
+    
+}
+
+export async function getUserSimpleInfo(token:string){
+    return await instance.post("user",{
+        token:token,
+    })
+}
+
+export async function getImagesOfReport(token:string,id:number,type:ImageType){
+    return await instance.post("report/images",{
+        token:token,
+        id:id,
+        type:ImageType
+    })
+    
     
 }

@@ -13,7 +13,7 @@
         <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
             <template #reference>
-              <el-tag :type="color(scope.row)">{{ scope.row.current_status }}</el-tag>
+              <el-tag :type="color(scope.row)">{{ argsComputed(scope.row.current_status ) }}</el-tag>
             </template>
           </el-popover>
         </template>
@@ -49,10 +49,10 @@
 import {Search} from "@element-plus/icons-vue";
 
 enum Status {
-  Checking = "检测中",
-  Completed = "检测完成",
-  Abnormality = "检测异常",
-  Error = "检测失败",
+  Checking = 0,
+  Completed = 1,
+  Abnormality = 2,
+  Error = 3,
 }
 
 type Report = {
@@ -62,9 +62,26 @@ type Report = {
   current_status: Status,
 }
 
+const argsComputed = (status:Status)=>{
+  return computed(()=>{
+      switch(status){
+        case Status.Completed:
+          return "检测完成";
+        case Status.Abnormality:
+          return "状态异常";
+        case Status.Error:
+          return "检测错误"
+        case Status.Checking:
+          return "检测中"
+      }
+  })
+}
+
+
 import { getReports } from "@/api";
 import { inject, ref, type Ref, computed } from "vue";
 import { type VueCookies } from "vue-cookies";
+import {useCommonStore, useHistoryStore} from "@/store";
 
 const reports = ref<Report[]>([]);
 const search = ref("");
@@ -94,6 +111,12 @@ const color = (scope: Report) => {
 const path = inject<Ref<string>>("path")!;
 
 function handleOpen(index: number, row: Report) {
+  const historyStore = useHistoryStore();
+  const commonStore = useCommonStore();
+  historyStore.id = row.id;
+  historyStore.doctor = row.doctor;
+  historyStore.sub_time = row.submitTime;
+  historyStore.patient = commonStore.username;
   path.value = `/${row.id.toString()}`;
 }
 

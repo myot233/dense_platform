@@ -22,17 +22,15 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, reactive,ref, watch } from 'vue';
-import { useRouter,useRoute} from 'vue-router';
+import { provide, ref, watch } from 'vue';
+import { useRouter} from 'vue-router';
 const routePath = ref("");
 const router = useRouter();
 
 
 provide("curRouter",router);
 provide("path",routePath);
-
 watch(routePath,(value:string,old:string,_)=>{
-
   router.push("/history"+value)
 });
 

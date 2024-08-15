@@ -3,7 +3,7 @@
   <el-form :model="form">
 
     <el-form-item label="Primary Point of Interest:">
-      <img src="" alt="Teeth Image" class="teeth-image">
+      <el-image></el-image>
     </el-form-item>
 
     <el-form-item label="医生">
@@ -27,7 +27,11 @@
 
 <script lang="ts" setup>
 import {useRoute, useRouter} from 'vue-router';
-import {ref} from "vue";
+import {inject, ref} from "vue";
+import {useHistoryStore} from "@/store";
+import {getImagesOfReport} from "@/api";
+import type {VueCookies} from "vue-cookies";
+import {ImageType} from "@/common";
 
 const router = useRouter();
 const routes = useRoute();
@@ -35,11 +39,20 @@ const id = routes.params.id
 
 let form = ref({
   primaryPoint: false,
-  image:"",
-  doctor: 'doctor - 医生',
-  patient: 'user01 - 患者1号',
-  diagnosis: '0度软组织方面: ...',
+  image:[],
+  doctor: '',
+  patient: '',
+  diagnosis: '',
   doctorFeedback: '',
 })
+const $cookies = inject<VueCookies>("$cookies");
+const store = useHistoryStore();
+form.value.doctor = store.doctor;
+form.value.patient = store.patient;
+getImagesOfReport($cookies?.get("token"),store.id,ImageType.source).then(async (x)=>{
+  for (let i in x.data.images){
+    imageUrl.value = URL.createObjectURL(await )
+  }
+});
 
 </script>

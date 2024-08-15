@@ -2,7 +2,7 @@
   <div class="common-layout">
     <el-container>
       <el-header style="height: auto">
-        <Header :name :login></Header>
+        <Header :name="store.username" :login></Header>
       </el-header>
       <el-container>
         <el-aside width="250px">
@@ -60,25 +60,40 @@ import {House, User, Notification, PieChart, Clock} from '@element-plus/icons-vu
 import {ref, inject, onMounted} from 'vue';
 import {type VueCookies} from 'vue-cookies';
 import {useRoute, useRouter} from 'vue-router';
-import {getUserInfo} from './api';
+import {getUserInfo, getUserSimpleInfo} from './api';
 import {ElMessage} from 'element-plus';
 import { ElMenu} from "element-plus";
+import {useCommonStore} from "@/store";
 
 const router = useRouter();
 const name = ref("")
 const login = ref(false)
 const $cookies = inject<VueCookies>('$cookies');
 const menu = ref(null)
-
+const store = useCommonStore();
 
 if ($cookies?.isKey("token")) {
   login.value = true;
   const token:string = $cookies.get("token");
-  getUserInfo(token).then(resp => {
-        name.value = resp.data.form.name;
-          
-      }
-  )
+  getUserInfo(token).then(x=>{
+    if(x.data.code != "0") {
+      ElMessage.error("获取用户信息失败")
+      return;
+    }
+    store.detail = x.data.form
+  }).catch((reason)=>{
+    ElMessage.error(reason);
+  });
+  getUserSimpleInfo(token).then(x=>{
+    if(x.data.code != "0") {
+      ElMessage.error("获取用户信息失败")
+      return;
+    }
+    store.username = x.data.user.id;
+    store.usertype = x.data.user.type;
+  }).catch((reason)=>{
+    ElMessage.error(reason);
+  });
 
 }
 
@@ -112,6 +127,7 @@ function handleSelect(index: string) {
 </script>
 
 <style scoped>
+
 .common-layout {
   position: absolute;
   top: 0;

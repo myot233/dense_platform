@@ -10,7 +10,7 @@
                 <el-form style="min-width: 600px">
                     <el-form-item  label="选择一位医生">
                         <el-select   style="text-align: end" placeholder="请选择" v-model="form.doctor">
-                            <el-option  v-for="doctor in doctors" :label="doctor" :value="doctor"></el-option>
+                            <el-option  v-for="doctor in doctors" :label="doctor.name" :value="doctor.id"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -18,7 +18,7 @@
             <div v-if="step == 1" style="display: flex;justify-content:center">
                 <el-form>
                     <el-form-item label="上传图片:">
-                        <Uploads  @on-success="(resp:any)=>{form.image = resp.fileId}"></Uploads>
+                        <Uploads  @onSuccess="(resp:any)=>{console.log(resp);form.images.push(resp.image as number)}"></Uploads>
                     </el-form-item>
                 </el-form>
             </div>
@@ -36,7 +36,7 @@
         <div></div>
         <el-button @click="()=> {if(step++ >= 2){
             router.push('history')
-            submitReport($cookies.get('token'),form.doctor,form.image).then(x=>{
+            submitReport($cookies.get('token'),form.doctor,form.images).then(x=>{
             
             })
         } }">{{ buttonNextText }}</el-button>
@@ -46,14 +46,17 @@
 
 
 <script lang="ts" setup>
-import { ref, watch,computed } from "vue"
+import {ref, watch, computed, inject} from "vue"
 import Uploads from "../parts/Uploads.vue";
 import { useRouter } from "vue-router";
-import { submitReport } from "@/api";
+import {getDoctors, submitReport} from "@/api";
+import type {VueCookies} from "vue-cookies";
+import type {UserSex} from "@/common";
+
 const router = useRouter();
 const form = ref({
     doctor: "",
-    image:"",
+    images:[] as number[],
 });
 const buttonNextText = computed(()=>{
     if(step.value == 2){
@@ -65,8 +68,19 @@ const buttonNextText = computed(()=>{
 
 
 const step = ref(0);
-const doctors = ref(["陈医生", "赵医生", "徐医生"]);
-
+const doctors = ref<{
+  id:string, 
+  name:string,
+  sex:UserSex,
+  position:string,
+  workplace:string
+}[]>();
+const $cookies = inject<VueCookies>('$cookies');
+if($cookies?.isKey("token")){
+  getDoctors($cookies?.get('token')).then((x)=>{
+    doctors.value = x.data.doctors
+  })
+}
 
 </script>
 

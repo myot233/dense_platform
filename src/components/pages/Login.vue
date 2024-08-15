@@ -79,16 +79,17 @@ import { login, register } from "@/api";
 import { ref, computed, watch, inject } from "vue"
 import type { VueCookies } from "vue-cookies";
 import {UserType} from "@/common";
-
+import {useCommonStore}  from "@/store"
 const centerDialogVisible = defineModel({ default: false })
 const isLogin = ref(true);
 const $cookies = inject<VueCookies>('$cookies');
+const store = useCommonStore();
 watch(centerDialogVisible, (value) => {
     if (value) {
         isLogin.value = true;
     }
 })
-const title = computed(() => isLogin ? "请登录" : "请注册")
+const title = computed(() => isLogin ? "请登录" : "请注册");
 
 
 const loginForm = ref<loginForm>({
@@ -108,15 +109,17 @@ const registerForm = ref<registerForm>({
 const loginButtonClick = () => {
     if (isLogin.value) {
         if (!$cookies?.isKey("token")) {
-
+          
             login(loginForm.value.account, loginForm.value.password).then(
                 (resp) => {
                     if (resp.data.code == "0") {
-                        document.cookie = `token=${resp.data.token}`
+                      store.username = resp.data.username;
+                        document.cookie = `token=${resp.data.token}`;
                         window.location.reload();
-                    }else{
-                      ElMessage.error(resp.data.message);
                     }
+                    else
+                      ElMessage.error(resp.data.message);
+                    
                 
                 }
             )
@@ -129,9 +132,11 @@ const loginButtonClick = () => {
         register(registerForm.value.account,registerForm.value.password,registerForm.value.type).then(
                 resp=>{
                     if (resp.data.code == "0") {
-                        document.cookie = `token=${resp.data.token}`
+                        document.cookie = `token=${resp.data.token}`;
+                        store.username = resp.data.username;
                         window.location.reload();
-                    } 
+                    }else
+                      ElMessage.error(resp.data.message); 
                 }
             )
         
