@@ -6,14 +6,14 @@
       </el-header>
       <el-container>
         <el-aside width="250px">
-          <el-menu ref="menu"  default-active="1" class="el-menu-vertical-demo" @select="handleSelect" >
-            <el-menu-item index="1">
+          <el-menu :router="true" ref="menu" @open="index => console.log(route.path)"   :default-active="route.path" class="el-menu-vertical-demo" @select="handleSelect" >
+            <el-menu-item index="/home">
               <el-icon>
                 <House></House>
               </el-icon>
               <span>主页</span>
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="/personal">
               <el-icon>
                 <User></User>
               </el-icon>
@@ -26,13 +26,13 @@
                 </el-icon>
                 <span>检测管理</span>
               </template>
-              <el-menu-item index="3-1">
+              <el-menu-item index="/check">
                 <el-icon>
                   <PieChart/>
                 </el-icon>
                 <span>龋齿检测</span>
               </el-menu-item>
-              <el-menu-item index="3-2">
+              <el-menu-item index="/history">
                 <el-icon>
                   <Clock/>
                 </el-icon>
@@ -57,20 +57,22 @@
 <script setup lang="ts">
 import Header from './components/parts/Header.vue';
 import {House, User, Notification, PieChart, Clock} from '@element-plus/icons-vue';
-import {ref, inject, onMounted} from 'vue';
+import {ref, inject, onMounted, provide} from 'vue';
 import {type VueCookies} from 'vue-cookies';
 import {useRoute, useRouter} from 'vue-router';
 import {getUserInfo, getUserSimpleInfo} from './api';
 import {ElMessage} from 'element-plus';
-import { ElMenu} from "element-plus";
+import {ElMenu} from "element-plus";
 import {useCommonStore} from "@/store";
-
+const route = useRoute();
 const router = useRouter();
 const name = ref("")
 const login = ref(false)
 const $cookies = inject<VueCookies>('$cookies');
-const menu = ref(null)
+const menu = ref(null);
 const store = useCommonStore();
+
+store.menu = menu;
 
 if ($cookies?.isKey("token")) {
   login.value = true;
@@ -98,7 +100,7 @@ if ($cookies?.isKey("token")) {
 }
 
 
-router.push("home");
+router.replace("home");
 
 
 function handleSelect(index: string) {
@@ -109,16 +111,16 @@ function handleSelect(index: string) {
   // 直接把index改成对应的route应该也可以
   switch (index) {
     case "1":
-      router.push("home");
+      router.replace("home");
       break;
     case "2":
-      router.push("personal");
+      router.replace("personal");
       break;
     case "3-1":
-      router.push("check");
+      router.replace("check");
       break;
     case "3-2":
-      router.push("history");
+      router.replace("history");
       break;
   }
 }

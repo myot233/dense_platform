@@ -13,7 +13,18 @@
 
         </el-card>
     </el-row>
-
+  <el-row v-if="store.usertype == UserType.Doctor">
+    <el-card>
+      <el-form label-width="auto" style="max-width: 600px">
+        <el-form-item label="所属医院:">
+          <el-input v-model="doctor_form.hospital" />
+        </el-form-item>
+        <el-form-item label="所属部门:">
+          <el-input v-model="doctor_form.department" />
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </el-row>
     <el-row>
         <el-card>
             <el-form :model="store.detail" label-width="auto" style="max-width: 600px">
@@ -54,17 +65,29 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import {inject, ref} from "vue";
 import Upload from "../parts/Upload.vue"
-import { type VueCookies } from "vue-cookies";
-import { getUserInfo, submitUserInfo,uploadAvatar} from "@/api";
-import {UserSex} from "@/common";
+import {type VueCookies} from "vue-cookies";
+import {axiosInstance, submitUserInfo, uploadAvatar} from "@/api";
+import {UserSex, UserType} from "@/common";
 import {ElMessage} from "element-plus";
 import {useCommonStore} from "@/store";
 
 const store = useCommonStore()
 const imageUrl = ref();
 const $cookies = inject<VueCookies>("$cookies")
+const doctor_form = ref({
+  hospital:"",
+  department:""
+});
+
+if(store.usertype == UserType.Doctor){
+  axiosInstance.post("doctor/info",{
+    token:$cookies?.get("token"),
+  }).then((x)=>{
+    doctor_form.value = x.data.form;
+  })
+}
 
 
 function onSubmit(){

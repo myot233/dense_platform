@@ -2,12 +2,12 @@
   <el-card>
     <el-page-header @back="goBack" >
       <template #content>
-        <span class="text-large font-600 mr-3" v-if="routePath != ''"> {{routePath.replace("/","")}} </span>
+        <span class="text-large font-600 mr-3" v-if="route.path.split('/').length >= 3"> {{path}} </span>
       </template>
       <template #breadcrumb>
         <el-breadcrumb separator="/">
         <el-breadcrumb-item >历史记录</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="routePath != '' ">{{ routePath.replace("/","")}}</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="  route.path.split('/').length >= 3 ">{{ path }}</el-breadcrumb-item>
           <!-- <el-breadcrumb-item :to="{ path: './page-header.html' }">
             homepage
           </el-breadcrumb-item>
@@ -22,20 +22,22 @@
 </template>
 
 <script lang="ts" setup>
-import { provide, ref, watch } from 'vue';
-import { useRouter} from 'vue-router';
-const routePath = ref("");
+import {computed, provide, ref, watch} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {constant} from "lodash-es";
+
 const router = useRouter();
+const route = useRoute();
+
+const path = computed(()=>{
+    const temp = route.path.split("/");
+    return temp[temp.length-1]
+})
 
 
-provide("curRouter",router);
-provide("path",routePath);
-watch(routePath,(value:string,old:string,_)=>{
-  router.push("/history"+value)
-});
 
 function goBack(){
-  routePath.value = ""
+  router.back();
   
 }
 

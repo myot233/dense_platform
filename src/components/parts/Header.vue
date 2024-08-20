@@ -66,7 +66,6 @@ const props = withDefaults(defineProps<HeaderProps>(), {
 
 if($cookies?.isKey("token")){
     getAvatar($cookies.get("token")).then(x=>{
-        console.log(x)
         const blob = x.data;
         const imageUrl = URL.createObjectURL(blob);
         src.value = imageUrl;

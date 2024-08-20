@@ -1,9 +1,10 @@
 <template>
 
   <el-form :model="form">
-
-    <el-form-item label="Primary Point of Interest:">
-      <el-image></el-image>
+    <el-form-item label="上传图片:">
+      <div v-for="uploadImage in uploadImages" style="margin-right: 16px">
+        <el-image :src="uploadImage" style="max-width: 200px"></el-image>
+      </div>
     </el-form-item>
 
     <el-form-item label="医生">
@@ -11,48 +12,136 @@
     </el-form-item>
 
     <el-form-item label="患者">
-      <el-link type="primary">{{ form.patient }}</el-link>
+      <el-link type="primary">{{ form.user }}</el-link>
     </el-form-item>
+    <el-form-item>
+      <el-text>当前检测状态:
+        <el-tag :type="color(form.current_status)">{{ argsComputed(form.current_status) }}</el-tag>
+      </el-text>
+    </el-form-item>
+    <div v-if="commonStore.usertype == UserType.Patient">
+      <div v-if="form.current_status == Status.Completed">
+        <el-form-item label="检测结果参考:">
+          <p>{{ form.diagnose }}</p>
+        </el-form-item>
 
-    <el-form-item label="检测结果参考:">
-      <p>{{ form.diagnosis }}</p>
-    </el-form-item>
-
-    <el-form-item label="医生评价">
-      <el-input v-model="form.doctorFeedback" type="textarea"></el-input>
-    </el-form-item>
+        <el-form-item label="医生评价">
+          <el-input type="textarea"></el-input>
+        </el-form-item>
+      </div>
+      <el-text v-else>医生正在检测您的报告中，请耐心等待</el-text>
+    </div>
+    <div v-else>
+      <el-form>
+        <el-form-item label="诊断结果:">
+          <el-input type="textarea" style="width: 50%"></el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button type="warning" >检测</el-button>
+          <el-button type="primary" >发布</el-button>
+        </el-form-item>
+      </el-form>
+      
+    </div>
   </el-form>
 </template>
 
 
 <script lang="ts" setup>
 import {useRoute, useRouter} from 'vue-router';
-import {inject, ref} from "vue";
-import {useHistoryStore} from "@/store";
-import {getImagesOfReport} from "@/api";
+import {computed, inject, ref} from "vue";
+import {useCommonStore, useHistoryStore} from "@/store";
+import {axiosInstance, getImageData, getImagesOfReport} from "@/api";
 import type {VueCookies} from "vue-cookies";
-import {ImageType} from "@/common";
+import {ImageType, UserType} from "@/common";
+import axios from "axios";
 
+type Comment = {
+  user: string,
+  content: string
+}
+
+type ReportDetailResponse = {
+  id: number,
+  user: string,
+  doctor: string,
+  submitTime: string,
+  current_status: Status,
+  diagnose: string,
+  comments: Comment[]
+}
+
+enum Status {
+  Checking = 0,
+  Completed = 1,
+  Abnormality = 2,
+  Error = 3,
+}
+
+type Report = {
+  id: number,
+  doctor: string,
+  submitTime: string,
+  current_status: Status,
+}
+const color = (status: Status) => {
+  switch (status) {
+    case Status.Checking:
+      return "primary";
+    case Status.Completed:
+      return "success";
+    case Status.Abnormality:
+      return "warning";
+    case Status.Error:
+      return "danger";
+  }
+}
+const argsComputed = (status: Status) => {
+  return computed(() => {
+    switch (status) {
+      case Status.Completed:
+        return "检测完成";
+      case Status.Abnormality:
+        return "状态异常";
+      case Status.Error:
+        return "检测错误"
+      case Status.Checking:
+        return "检测中"
+    }
+  })
+}
 const router = useRouter();
 const routes = useRoute();
-const id = routes.params.id
-
-let form = ref({
-  primaryPoint: false,
-  image:[],
-  doctor: '',
-  patient: '',
-  diagnosis: '',
-  doctorFeedback: '',
-})
+const id = routes.params.id;
+const commonStore = useCommonStore();
 const $cookies = inject<VueCookies>("$cookies");
-const store = useHistoryStore();
-form.value.doctor = store.doctor;
-form.value.patient = store.patient;
-getImagesOfReport($cookies?.get("token"),store.id,ImageType.source).then(async (x)=>{
-  for (let i in x.data.images){
-    imageUrl.value = URL.createObjectURL(await )
+router.beforeEach((to, from) => {
+  console.log(from);
+  console.log(to);
+  const to_path_arr = to.path.split("/");
+  const from_path_arr = from.path.split("/")
+  if (to.path == "/history") return true;
+  if (from_path_arr[1] === "history" && to_path_arr[1] === "history" && from_path_arr.length > 2) {
+
+    return "/" + to_path_arr[to_path_arr.length - 1];
   }
+
+  return true;
+})
+
+const form = ref<ReportDetailResponse>({
+  comments: [], current_status: Status.Completed, diagnose: "", doctor: "", id: 0, submitTime: "", user: ""
+
 });
+const uploadImages = ref<string[]>([]);
+
+getImagesOfReport($cookies?.get("token"), Number(id), ImageType.source).then(async (x) => uploadImages.value = await Promise.all(x.data.images.map(async (x: number) => URL.createObjectURL((await getImageData($cookies?.get("token"), Number(x))).data))));
+axiosInstance.post("/report/detail", {
+  token: $cookies?.get("token"),
+  id: id,
+}).then((resp) => {
+  form.value = resp.data;
+})
+
 
 </script>

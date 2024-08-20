@@ -35,7 +35,7 @@
         <div v-else></div>
         <div></div>
         <el-button @click="()=> {if(step++ >= 2){
-            router.push('history')
+            router.push('history');
             submitReport($cookies.get('token'),form.doctor,form.images).then(x=>{
             
             })
@@ -52,6 +52,7 @@ import { useRouter } from "vue-router";
 import {getDoctors, submitReport} from "@/api";
 import type {VueCookies} from "vue-cookies";
 import type {UserSex} from "@/common";
+import {useCommonStore} from "@/store";
 
 const router = useRouter();
 const form = ref({

@@ -15,7 +15,8 @@ export const useCommonStore = defineStore("common",()=>{
         address:""
 
     });
-    return {username, usertype,detail};
+    const menu = ref<any>(null)
+    return {username, usertype,detail,menu};
 })
 enum Status {
     Checking = 0,
