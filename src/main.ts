@@ -7,11 +7,15 @@ import 'element-plus/dist/index.css'
 import './assets/index.css'
 import 'jose'
 import {createPinia} from "pinia";
-
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const app = createApp(App);
 const pinia = createPinia()
-app.use(ElementPlus);
+
+app.use(ElementPlus,{
+    locale:zhCn
+});
 app.use(router);
 app.use(VueCookies);
+
 app.use(pinia);
 app.mount('#app');
