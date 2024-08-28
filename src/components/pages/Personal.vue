@@ -17,10 +17,10 @@
     <el-card>
       <el-form label-width="auto" style="max-width: 600px">
         <el-form-item label="所属医院:">
-          <el-input v-model="doctor_form.hospital" />
+          <el-input v-model="doctor_form.workplace" />
         </el-form-item>
         <el-form-item label="所属部门:">
-          <el-input v-model="doctor_form.department" />
+          <el-input v-model="doctor_form.position" />
         </el-form-item>
       </el-form>
     </el-card>
@@ -68,7 +68,7 @@
 import {inject, ref} from "vue";
 import Upload from "../parts/Upload.vue"
 import {type VueCookies} from "vue-cookies";
-import {axiosInstance, submitUserInfo, uploadAvatar} from "@/api";
+import {axiosInstance, submitDoctorInfo, submitUserInfo, uploadAvatar} from "@/api";
 import {UserSex, UserType} from "@/common";
 import {ElMessage} from "element-plus";
 import {useCommonStore} from "@/store";
@@ -77,8 +77,8 @@ const store = useCommonStore()
 const imageUrl = ref();
 const $cookies = inject<VueCookies>("$cookies")
 const doctor_form = ref({
-  hospital:"",
-  department:""
+  workplace:"",
+  position:""
 });
 
 if(store.usertype == UserType.Doctor){
@@ -101,6 +101,18 @@ function onSubmit(){
     }).catch((reason)=>{
       ElMessage.error(reason);
     })
+  if(store.usertype == UserType.Doctor){
+    submitDoctorInfo($cookies?.get("token"),doctor_form.value).then(x=>{
+      if(x.data.code == '0'){
+        doctor_form.value = x.data.form;
+        return;
+      }else{
+        ElMessage.error(x.data.message)
+      }
+    }).catch((reason)=>{
+      ElMessage.error(reason);
+    })
+  }
 }
 
 
