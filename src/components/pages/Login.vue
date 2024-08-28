@@ -80,6 +80,7 @@ import { ref, computed, watch, inject } from "vue"
 import type { VueCookies } from "vue-cookies";
 import {UserType} from "@/common";
 import {useCommonStore}  from "@/store"
+import sha256 from 'crypto-js/sha256';
 const centerDialogVisible = defineModel({ default: false })
 const isLogin = ref(true);
 const $cookies = inject<VueCookies>('$cookies');
@@ -110,12 +111,13 @@ const loginButtonClick = () => {
     if (isLogin.value) {
         if (!$cookies?.isKey("token")) {
           
-            login(loginForm.value.account, loginForm.value.password).then(
+            login(loginForm.value.account, sha256(loginForm.value.password).toString()).then(
                 (resp) => {
                     if (resp.data.code == "0") {
                       store.username = resp.data.username;
-                        document.cookie = `token=${resp.data.token}`;
-                        window.location.reload();
+                        //document.cookie = `token=${resp.data.token}`;
+                      $cookies?.set("token",resp.data.token)  
+                      window.location.reload();
                     }
                     else
                       ElMessage.error(resp.data.message);
@@ -129,7 +131,9 @@ const loginButtonClick = () => {
         }
     }else{
         if ($cookies?.isKey("token")) return;
-        register(registerForm.value.account,registerForm.value.password,registerForm.value.type).then(
+        register(registerForm.value.account,
+            sha256(registerForm.value.password).toString(),
+            registerForm.value.type).then(
                 resp=>{
                     if (resp.data.code == "0") {
                         document.cookie = `token=${resp.data.token}`;
