@@ -21,6 +21,14 @@ export async function submitUserInfo(token:string,form:any) {
      })
  }
 
+export async function submitDoctorInfo(token:string,form:any) {
+    return await axiosInstance.post("/doctor/info/set",{
+        token:token,
+        form:form
+    })
+}
+
+
 export async function getAvatar(token:string) {
     return await axiosInstance.post("avatar",{
         token:token
