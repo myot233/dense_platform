@@ -69,6 +69,7 @@ const router = useRouter();
 const name = ref("")
 const login = ref(false)
 const $cookies = inject<VueCookies>('$cookies');
+$cookies?.config(Date.now() + 7,"/","localhost")
 const menu = ref(null);
 const store = useCommonStore();
 
@@ -78,7 +79,7 @@ if ($cookies?.isKey("token")) {
   login.value = true;
   const token:string = $cookies.get("token");
   getUserInfo(token).then(x=>{
-    if(x.data.code != "0") {
+    if(x.data.code != "0" && x.data.code != "33") {
       ElMessage.error("获取用户信息失败")
       return;
     }
@@ -87,7 +88,7 @@ if ($cookies?.isKey("token")) {
     ElMessage.error(reason);
   });
   getUserSimpleInfo(token).then(x=>{
-    if(x.data.code != "0") {
+    if(x.data.code != "0" && x.data.code != "33") {
       ElMessage.error("获取用户信息失败")
       return;
     }
