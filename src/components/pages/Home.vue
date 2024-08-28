@@ -1,4 +1,42 @@
 <template>
+  <el-row>
+    <el-col :span="8" >
+      <el-card style="margin: 16px 16px 16px auto">
+        <div style="display: grid;grid-template: auto / 1fr 1fr">
+          <User style="height: 75px"></User>
+          <div>
+            <el-text size="large">用户数量</el-text>
+            <h2 style="margin: 8px 0 4px;">114514</h2>
+            <el-text type="success">100%</el-text>
+          </div>
+        </div>
+      </el-card>
+    </el-col>  <!--展示当前用户数量，医生数量，和检测数量 -->
+    <el-col :span="8">
+      <el-card style="margin: 16px 16px 16px auto">
+        <div style="display: grid;grid-template: auto / 1fr 1fr">
+          <User style="height: 75px"></User>
+          <div>
+            <el-text size="large">医生数量</el-text>
+            <h2 style="margin: 8px 0 4px;">114514</h2>
+            <el-text type="success">25%</el-text>
+          </div>
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="8">
+      <el-card style="margin: 16px 0px 16px auto">
+          <div style="display: grid;grid-template: auto / 1fr 1fr">
+          <Edit style="height: 75px"></Edit>
+          <div>
+            <el-text size="large">检测数量</el-text>
+            <h2 style="margin: 8px 0 4px;">114514</h2>
+            <el-text type="success">30%</el-text>
+          </div>
+        </div>
+      </el-card>
+    </el-col>
+  </el-row>
     <el-row>
         <el-col>
             <el-card>
@@ -83,6 +121,7 @@
 
 <script setup lang="ts">
 import logo from '../icon/logo.vue';
+import {Edit, User} from "@element-plus/icons-vue";
 </script>
 
 
