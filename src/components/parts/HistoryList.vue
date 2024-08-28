@@ -1,13 +1,27 @@
 <template>
   <div>
     <div style="display: flex;align-items: center;margin-top: 16px">
-      <el-icon style="max-resolution: res;margin-right: 8px">
-        <Search></Search>
-      </el-icon>
-      
-      <el-input style="width: 160px; margin-right: 16px" v-model="search" placeholder="搜索报告号或医生" clearable
-                @clear="handleSearch"></el-input>
-      <el-button type="primary" :icon="Refresh" @click="refresh()"></el-button>
+
+
+      <div style="margin:8px 0;background: #f4f4f5;padding: 8px 8px;width: 100%">
+        <el-icon style="max-resolution: res;margin-right: 8px">
+          <Search></Search>
+        </el-icon>
+        <el-input style="width: 160px; margin-right: 16px" v-model="search" placeholder="搜索报告号或医生" clearable
+                  @clear="handleSearch"></el-input>
+
+        <el-divider direction="vertical"></el-divider>
+        <el-date-picker
+            type="daterange"
+            v-model="dataRange"
+            range-separator="To"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            :size="'medium'"
+        />
+        <el-divider direction="vertical"></el-divider>
+        <el-button type="primary" :icon="Refresh" @click="refresh()"></el-button>
+      </div>
     </div>
     <el-table :data="filteredReports" style="width: 100%">
       <el-table-column prop="id" label="报告号" sortable/>
@@ -58,7 +72,7 @@
 <script lang="ts" setup>
 import {Refresh, Search} from "@element-plus/icons-vue";
 import {deleteReport, getReports} from "@/api";
-import {computed, inject, ref} from "vue";
+import {computed, inject, ref, watch} from "vue";
 import {type VueCookies} from "vue-cookies";
 import {useCommonStore, useHistoryStore} from "@/store";
 import {useRouter} from "vue-router";
@@ -102,9 +116,11 @@ const pageSize = ref(10);
 const store = useCommonStore();
 const router = useRouter();
 const $cookies = inject<VueCookies>("$cookies");
+const dataRange = ref<string[]>([]);
+
 refresh();
-router.beforeEach((to,from)=> {
-  if (to.path == '/history' && from.path == '/check'){
+router.beforeEach((to, from) => {
+  if (to.path == '/history' && from.path == '/check') {
     refresh()
   }
 })
@@ -136,8 +152,11 @@ function handleDelete(index: number, row: Report) {
 }
 
 const filteredReports = computed(() => {
-  const filtered = reports.value.filter(report =>
-      report.id.toString().includes(search.value) || report.doctor.includes(search.value)
+  const filtered = reports.value.filter(report => {
+        const searchExp = report.id.toString().includes(search.value) || report.doctor.includes(search.value);
+        const dateExp = dataRange.value.length == 0 || Date.parse(dataRange.value[0]) <= Date.parse(report.submitTime) && Date.parse(report.submitTime) < Date.parse(dataRange.value[1]);
+    return searchExp && dateExp;    
+  }
   );
   return filtered.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 });
@@ -146,7 +165,7 @@ function handleSearch() {
   currentPage.value = 1;
 }
 
-function refresh(){
+function refresh() {
   if ($cookies?.isKey("token")) {
     getReports($cookies.get("token")).then(x => {
       reports.value = x.data.reports;
