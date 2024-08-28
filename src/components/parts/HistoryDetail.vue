@@ -22,11 +22,11 @@
     <div v-if="commonStore.usertype == UserType.Patient">
       <div v-if="form.current_status == Status.Completed">
         <el-form-item label="检测结果参考:">
-          <p>{{ form.diagnose }}</p>
+          <p></p>
         </el-form-item>
 
         <el-form-item label="医生评价">
-          <el-input type="textarea"></el-input>
+          <el-input v-model="form.diagnose"  type="textarea" readonly></el-input>
         </el-form-item>
       </div>
       <el-text v-else>医生正在检测您的报告中，请耐心等待</el-text>
@@ -34,27 +34,30 @@
     <div v-else>
       <el-form>
         <el-form-item label="诊断结果:">
-          <el-input type="textarea" style="width: 50%"></el-input>
+          <el-input v-model="form.diagnose" type="textarea" placeholder="请输入诊断结果" style="width: 50%"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="warning" >检测</el-button>
-          <el-button type="primary" >发布</el-button>
+          <el-button type="primary" @click="submitDiagnose()" >发布</el-button>
         </el-form-item>
       </el-form>
-      
     </div>
   </el-form>
+
 </template>
 
 
 <script lang="ts" setup>
 import {useRoute, useRouter} from 'vue-router';
 import {computed, inject, ref} from "vue";
-import {useCommonStore, useHistoryStore} from "@/store";
+import {useCommonStore} from "@/store";
 import {axiosInstance, getImageData, getImagesOfReport} from "@/api";
 import type {VueCookies} from "vue-cookies";
 import {ImageType, UserType} from "@/common";
-import axios from "axios";
+const comments = ref([{
+  user:"abc",
+  content:"hello world"
+}])
 
 type Comment = {
   user: string,
@@ -130,8 +133,13 @@ router.beforeEach((to, from) => {
 })
 
 const form = ref<ReportDetailResponse>({
-  comments: [], current_status: Status.Completed, diagnose: "", doctor: "", id: 0, submitTime: "", user: ""
-
+  comments: [], 
+  current_status: Status.Completed, 
+  diagnose: "", 
+  doctor: "", 
+  id: 0, 
+  submitTime: "", 
+  user: ""
 });
 const uploadImages = ref<string[]>([]);
 
@@ -143,5 +151,13 @@ axiosInstance.post("/report/detail", {
   form.value = resp.data;
 })
 
+function submitDiagnose(){
+  axiosInstance.post("/report/diagnose/submit",{
+      token:$cookies?.get("token"),
+      id:form.value.id,
+      diagnose:form.value.diagnose
+  })
+  
+}
 
 </script>
