@@ -11,6 +11,13 @@
 
 
         <div class="avatar" v-if="login">
+          <el-button-group>
+            <el-button size="large" :icon="FullScreen" text/>
+            
+            <el-button size="large" :icon="Sunny" text/>
+            <el-button size="large" :icon="Bell" text/>
+            
+          </el-button-group>
             <el-avatar fit="cover" size="small" :src="src"></el-avatar>
             <el-text>{{ name }}</el-text>
             <el-dropdown>
@@ -43,16 +50,19 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowDown } from '@element-plus/icons-vue';
-import { inject, ref } from 'vue';
+import {ArrowDown, Bell, FullScreen, Sunny} from '@element-plus/icons-vue';
+import {inject, ref} from 'vue';
 import logo from '../icon/logo.vue';
 import Login from '../pages/Login.vue';
-import type { VueCookies } from 'vue-cookies';
-import { getAvatar } from '@/api';
-import { base64url } from 'jose';
+import type {VueCookies} from 'vue-cookies';
+import {getAvatar} from '@/api';
+import {useCommonStore} from "@/store";
+import {UserType} from "@/common";
+
 const $cookies = inject<VueCookies>('$cookies');
 const showDialogVariable = ref(false);
 const src = ref<string>();
+const store = useCommonStore();
 export interface HeaderProps {
     name: string,
     login?: boolean
@@ -85,7 +95,20 @@ function showDialog() {
 function logout(){
     
     if($cookies?.isKey("token")){
-        $cookies.remove("token");
+        $cookies.remove("token","/");
+    }
+    store.username = "";
+    store.usertype = UserType.Patient;
+    store.menu = undefined
+    store.detail = {
+      name: "",
+      sex: "",
+      birth: "",
+      phone:"",
+      email:"",
+      password:"",
+      address:""
+
     }
     window.location.reload();
     
@@ -95,6 +118,10 @@ function logout(){
 
 
 <style scoped>
+.el-button {
+  height: 100%;
+
+}
 .avatar .el-avatar {
     margin-right: 8px;
 
