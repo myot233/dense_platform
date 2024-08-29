@@ -21,7 +21,7 @@ import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 
 import type { UploadProps, UploadUserFile } from 'element-plus'
-import Upload from "@/components/parts/Upload.vue";
+import Upload from "@/components/pages/Profile/parts/Upload.vue";
 import {API_ADDRESS} from "@/common";
 
 const fileList = ref<UploadUserFile[]>([])

@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import {inject, ref} from "vue";
-import Upload from "../parts/Upload.vue"
+import Upload from "./parts/Upload.vue"
 import {type VueCookies} from "vue-cookies";
 import {axiosInstance, submitDoctorInfo, submitUserInfo, uploadAvatar} from "@/api";
 import {UserSex, UserType} from "@/common";

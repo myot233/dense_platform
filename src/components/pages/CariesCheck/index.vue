@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 import {ref, watch, computed, inject} from "vue"
-import Uploads from "../parts/Uploads.vue";
+import Uploads from "./parts/Uploads.vue";
 import { useRouter } from "vue-router";
 import {getDoctors, submitReport} from "@/api";
 import type {VueCookies} from "vue-cookies";

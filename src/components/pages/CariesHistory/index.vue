@@ -2,7 +2,7 @@
   <el-card>
     <el-page-header @back="goBack" >
       <template #content>
-        <span class="text-large font-600 mr-3" v-if="route.path.split('/').length >= 3"> {{path}} </span>
+        <span class="text-large font-600 mr-0" v-if="route.path.split('/').length >= 3"> {{path}} </span>
       </template>
       <template #breadcrumb>
         <el-breadcrumb separator="/">

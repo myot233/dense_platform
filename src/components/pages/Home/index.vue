@@ -1,40 +1,39 @@
 <template>
   <el-row>
     <el-col :span="8" >
-      <el-card style="margin: 16px 16px 16px auto">
-        <div style="display: grid;grid-template: auto / 1fr 1fr">
-          <User style="height: 75px"></User>
-          <div>
-            <el-text size="large">用户数量</el-text>
-            <h2 style="margin: 8px 0 4px;">114514</h2>
-            <el-text type="success">100%</el-text>
-          </div>
-        </div>
-      </el-card>
+      <DataCard :num="25" percent="25%" title="用户数量">
+        <User></User>
+      </DataCard>
+<!--      <el-card style="margin: 16px 16px 16px auto">-->
+<!--        <div style="display: grid;grid-template: auto / 1fr 1fr">-->
+<!--          <User style="height: 75px"></User>-->
+<!--          <div>-->
+<!--            <el-text size="large">用户数量</el-text>-->
+<!--            <h2 style="margin: 8px 0 4px;">114514</h2>-->
+<!--            <el-text type="success">100%</el-text>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </el-card>-->
     </el-col>  <!--展示当前用户数量，医生数量，和检测数量 -->
     <el-col :span="8">
-      <el-card style="margin: 16px 16px 16px auto">
-        <div style="display: grid;grid-template: auto / 1fr 1fr">
-          <User style="height: 75px"></User>
-          <div>
-            <el-text size="large">医生数量</el-text>
-            <h2 style="margin: 8px 0 4px;">114514</h2>
-            <el-text type="success">25%</el-text>
-          </div>
-        </div>
-      </el-card>
+      <DataCard :num="25" percent="25%" title="用户数量">
+          <User></User>
+      </DataCard>
     </el-col>
     <el-col :span="8">
-      <el-card style="margin: 16px 0px 16px auto">
-          <div style="display: grid;grid-template: auto / 1fr 1fr">
-          <Edit style="height: 75px"></Edit>
-          <div>
-            <el-text size="large">检测数量</el-text>
-            <h2 style="margin: 8px 0 4px;">114514</h2>
-            <el-text type="success">30%</el-text>
-          </div>
-        </div>
-      </el-card>
+      <DataCard :num="25" percent="25%" title="检测数量">
+        <Edit></Edit>
+      </DataCard>
+<!--      <el-card style="margin: 16px 0px 16px auto">-->
+<!--          <div style="display: grid;grid-template: auto / 1fr 1fr">-->
+<!--          <Edit style="height: 75px"></Edit>-->
+<!--          <div>-->
+<!--            <el-text size="large">检测数量</el-text>-->
+<!--            <h2 style="margin: 8px 0 4px;">114514</h2>-->
+<!--            <el-text type="success">30%</el-text>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </el-card>-->
     </el-col>
   </el-row>
     <el-row>
@@ -68,8 +67,8 @@
             <el-card style="width: fit-content;">
                 <el-row>
                     <el-col :span="12">
-                        <video id="video" src="@/assets/data.mp4" autoplay="true" muted="true" loop="true"
-                            v-on:focus="(x) => { }"></video>
+                        <video id="video" src="../../../assets/data.mp4" autoplay="true" muted="true" loop="true"
+                               v-on:focus="(x) => { }"></video>
                     </el-col>
                     <el-col :span="12">
                         <div>
@@ -84,8 +83,8 @@
             <el-card style="width: fit-content;">
                 <el-row>
                     <el-col :span="12">
-                        <video id="video" src="@/assets/信息2.mp4" autoplay="true" muted="true" loop="true"
-                            v-on:focus="(x) => { }"></video>
+                        <video id="video" src="../../../assets/信息2.mp4" autoplay="true" muted="true" loop="true"
+                               v-on:focus="(x) => { }"></video>
                     </el-col>
                     <el-col :span="12">
                         <div>
@@ -102,8 +101,8 @@
             <el-card style="width: fit-content;">
                 <el-row>
                     <el-col :span="12">
-                        <video id="video" src="@/assets/分析.mp4" autoplay="true" muted="true" loop="true"
-                            v-on:focus="(x) => { }"></video>
+                        <video id="video" src="../../../assets/分析.mp4" autoplay="true" muted="true" loop="true"
+                               v-on:focus="(x) => { }"></video>
                     </el-col>
                     <el-col :span="12">
                         <div>
@@ -120,12 +119,16 @@
 </template>
 
 <script setup lang="ts">
-import logo from '../icon/logo.vue';
+import logo from '../../icon/logo.vue';
 import {Edit, User} from "@element-plus/icons-vue";
+import DataCard from "@/components/pages/Home/parts/DataCard.vue";
+
+
 </script>
 
 
 <style scoped>
+
 video {
     height: 200px;
     margin-right: 16px;
