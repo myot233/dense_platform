@@ -13,4 +13,4 @@ export enum ImageType{
     result = 1
 }
 
-export const API_ADDRESS:string = "http://localhost:24552";
+export const API_ADDRESS:string = "http://192.168.71.143:8767";

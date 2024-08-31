@@ -5,10 +5,16 @@ import Check from '@/components/pages/CariesCheck/index.vue'
 import History from '@/components/pages/CariesHistory/index.vue'
 import HistoryList from '@/components/pages/CariesHistory/parts/HistoryList.vue'
 import HistoryDetail from '@/components/pages/CariesHistory/parts/HistoryDetail.vue'
+import AccountAccess from '@/components/pages/AccountAccess/index.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path:"/login",
+      component:AccountAccess
+    }
+      ,{
+      
       path: "/home",
       component: Home,
 

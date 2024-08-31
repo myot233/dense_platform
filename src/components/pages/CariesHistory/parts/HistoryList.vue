@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div style="display: flex;align-items: center;margin-top: 16px">
-
-
-      <div style="margin:8px 0;background: #f4f4f5;padding: 8px 8px;width: 100%">
+<!--    <div style="display: flex;align-items: center;margin-top: 16px">-->
+  <div class="flex items-center mt-4">
+      <div v-if="filterVisible" style="margin:8px 0;background: #f4f4f5;padding: 8px 8px;width: 100%">
         <el-icon style="max-resolution: res;margin-right: 8px">
           <Search></Search>
         </el-icon>
@@ -23,7 +22,7 @@
         <el-button type="primary" :icon="Refresh" @click="refresh()"></el-button>
       </div>
     </div>
-    <el-table :data="filteredReports" style="width: 100%">
+    <el-table   :data="filteredReports" style="width: 100%">
       <el-table-column prop="id" label="报告号" sortable/>
       <el-table-column prop="doctor" label="负责医生" sortable/>
       <el-table-column prop="submitTime" label="提交时间" sortable>
@@ -107,7 +106,9 @@ const argsComputed = (status: Status) => {
     }
   })
 }
-
+type Props = {
+    filterVisible:boolean
+}
 
 const reports = ref<Report[]>([]);
 const search = ref("");
@@ -117,6 +118,9 @@ const store = useCommonStore();
 const router = useRouter();
 const $cookies = inject<VueCookies>("$cookies");
 const dataRange = ref<string[]>([]);
+const props = withDefaults(defineProps<Props>(),{
+    filterVisible:()=>true,
+})
 
 refresh();
 router.beforeEach((to, from) => {
