@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, provide, ref, watch} from 'vue';
+import {computed} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {constant} from "lodash-es";
+;
 
 const router = useRouter();
 const route = useRoute();

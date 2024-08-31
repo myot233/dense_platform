@@ -12,9 +12,9 @@ import "@/style.css"
 const app = createApp(App);
 const pinia = createPinia()
 
-app.use(ElementPlus,{
-    locale:zhCn
-});
+// app.use(ElementPlus,{
+//     locale:zhCn
+// });
 app.use(router);
 app.use(VueCookies);
 

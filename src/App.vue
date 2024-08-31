@@ -1,7 +1,15 @@
 ﻿<script setup lang="ts">
       import router from "@/router";
-
-      router.push('/login')
+      import {useCookies} from "@/common";
+      import {onMounted} from "vue";
+      const cookies = useCookies();
+      onMounted(()=>{
+        if(cookies.isKey("token")){
+          router.push("/user")
+        }else{
+          router.push("/login")
+        }
+      })
 </script>
 
 <template>

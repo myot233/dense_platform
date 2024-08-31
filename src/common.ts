@@ -1,4 +1,7 @@
-﻿export enum UserSex{
+﻿import {inject} from "vue";
+import type {VueCookies} from "vue-cookies";
+
+export enum UserSex{
     Female = 0,
     Male = 1,
 }
@@ -13,4 +16,6 @@ export enum ImageType{
     result = 1
 }
 
-export const API_ADDRESS:string = "http://192.168.71.143:8767";
+export const API_ADDRESS:string = "http://localhost:8767";
+
+export let useCookies = ():VueCookies => inject<VueCookies>("$cookies")!

@@ -6,14 +6,14 @@
       </el-header>
       <el-container>
         <el-aside width="250px">
-          <el-menu :router="true" ref="menu" @open="index => console.log(route.path)"   :default-active="route.path" class="el-menu-vertical-demo" @select="handleSelect" >
-            <el-menu-item index="/home">
+          <el-menu :router="true" ref="menu" @open="index => console.log(route.path)"   :default-active="route.path" class="el-menu-vertical-demo">
+            <el-menu-item index="/user/home">
               <el-icon>
                 <House></House>
               </el-icon>
               <span>主页</span>
             </el-menu-item>
-            <el-menu-item index="/personal">
+            <el-menu-item index="/user/personal">
               <el-icon>
                 <User></User>
               </el-icon>
@@ -26,13 +26,13 @@
                 </el-icon>
                 <span>检测管理</span>
               </template>
-              <el-menu-item index="/check">
+              <el-menu-item index="/user/check">
                 <el-icon>
                   <PieChart/>
                 </el-icon>
                 <span>龋齿检测</span>
               </el-menu-item>
-              <el-menu-item index="/history">
+              <el-menu-item index="/user/history">
                 <el-icon>
                   <Clock/>
                 </el-icon>
@@ -46,7 +46,6 @@
           <el-main style="background-color: #EBEEF5;height: 100%">
             <RouterView ></RouterView>
           </el-main>
-
         </el-container>
       </el-container>
     </el-container>
@@ -101,30 +100,30 @@ if ($cookies?.isKey("token")) {
 }
 
 
-router.replace("home");
+router.replace("/user/home");
 
 
-function handleSelect(index: string) {
-  if (!$cookies?.isKey("token")) {
-    ElMessage.error("请登录后使用本系统");
-    return;
-  }
-  // 直接把index改成对应的route应该也可以
-  switch (index) {
-    case "1":
-      router.replace("home");
-      break;
-    case "2":
-      router.replace("personal");
-      break;
-    case "3-1":
-      router.replace("check");
-      break;
-    case "3-2":
-      router.replace("history");
-      break;
-  }
-}
+// function handleSelect(index: string) {
+//   if (!$cookies?.isKey("token")) {
+//     ElMessage.error("请登录后使用本系统");
+//     return;
+//   }
+//   // 直接把index改成对应的route应该也可以
+//   switch (index) {
+//     case "1":
+//       router.replace("home");
+//       break;
+//     case "2":
+//       router.replace("personal");
+//       break;
+//     case "3-1":
+//       router.replace("check");
+//       break;
+//     case "3-2":
+//       router.replace("history");
+//       break;
+//   }
+// }
 
 
 </script>

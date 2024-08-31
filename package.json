@@ -13,6 +13,8 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.7.4",
+    "crypto-js": "^4.2.0",
+    "echarts": "^5.5.1",
     "element-plus": "^2.7.7",
     "jose": "^5.6.3",
     "pinia": "^2.2.1",
@@ -22,11 +24,17 @@
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.20",
     "npm-run-all2": "^6.2.0",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10",
     "typescript": "~5.4.0",
+    "unplugin-auto-import": "^0.18.2",
+    "unplugin-vue-components": "^0.27.4",
     "vite": "^5.3.1",
     "vite-plugin-vue-devtools": "^7.3.1",
     "vue-tsc": "^2.0.21"

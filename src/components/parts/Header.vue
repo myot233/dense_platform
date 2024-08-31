@@ -31,18 +31,12 @@
                 </template>
             </el-dropdown>
         </div>
-<!--        <div @click="userLogin" style="cursor: pointer;" class="avatar" v-else>-->
-<!--            <el-avatar size="small"></el-avatar>-->
-<!--            <el-text >未登录</el-text>-->
-<!--            <el-icon size="18px">-->
-<!--                <ArrowDown />-->
-<!--            </el-icon>-->
-<!--        </div>-->
+
 
 
 
     </div>
-    <Login v-model="showDialogVariable"></Login>
+
 
 </template>
 
