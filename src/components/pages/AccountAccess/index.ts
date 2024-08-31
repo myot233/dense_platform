@@ -10,5 +10,5 @@ export type RegisterForm = {
     account:string, 
     type:UserType, 
     password:string,
-    pssswordRepeat:string
+    _password:string
 }

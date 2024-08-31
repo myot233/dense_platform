@@ -6,6 +6,11 @@ import IcBaselineWechat from "@/components/icon/IcBaselineWechat.vue";
 import MingcuteQqLine from "@/components/icon/MingcuteQqLine.vue";
 import {login as loginRequest } from "@/api"
 import {type LoginForm} from ".."
+import Sha256 from "crypto-js/sha256"
+import {useCookies} from "@/common";
+import router from "@/router";
+import {ElMessage, type FormInstance, type FormRules} from "element-plus";
+
 const isLoginView = inject<Ref<boolean>>("isLoginView")!
 const loginModel = ref<LoginForm>({account:"",password:""});
 const loginForm = ref<FormInstance>();
@@ -18,10 +23,6 @@ const rules = ref<FormRules<LoginForm>>({
   ]
 })
 const $cookies = useCookies();
-import Sha256 from "crypto-js/sha256"
-import {useCookies} from "@/common";
-import router from "@/router";
-import {ElMessage, type FormInstance, type FormRules} from "element-plus";
 
 async function login()
 {
@@ -52,7 +53,7 @@ async function login()
       <el-input v-model="loginModel.account" placeholder="账号" size="large" :prefix-icon="User" ></el-input>
     </el-form-item>
     <el-form-item class="w-full" prop="password">
-      <el-input v-model="loginModel.password" placeholder="密码" size="large" :prefix-icon="Key"></el-input>
+      <el-input type="password" v-model="loginModel.password" placeholder="密码" size="large" :prefix-icon="Key"></el-input>
     </el-form-item>
   </el-form>
   <div class="grid md:grid-cols-2 w-full max-md:grid-rows-2 gap-2">

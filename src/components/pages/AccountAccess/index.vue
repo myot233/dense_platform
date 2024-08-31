@@ -27,9 +27,9 @@
 <script setup lang="ts">
 import Logo from "@/components/icon/logo.vue";
 
-import Login from "@/components/pages/AccountAccess/parts/Login.vue";
+import Login from "./parts/Login.vue";
 import {provide, ref} from "vue";
-import Register from "@/components/pages/AccountAccess/parts/Register.vue";
+import Register from "./parts/Register.vue";
 const isLoginView = ref(true)
 provide("isLoginView",isLoginView)
 
