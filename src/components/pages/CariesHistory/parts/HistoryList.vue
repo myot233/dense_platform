@@ -143,7 +143,7 @@ const color = (scope: Report) => {
 
 
 function handleOpen(index: number, row: Report) {
-  router.push(`/history/${row.id.toString()}`);
+  router.push(`/user/history/${row.id.toString()}`);
 }
 
 function handleDelete(index: number, row: Report) {
