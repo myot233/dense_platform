@@ -7,7 +7,7 @@ import {UserType} from "@/common";
 import {register as api_register} from "@/api";
 import type {VueCookies} from "vue-cookies";
 import router from "@/router";
-
+import Sha256 from "crypto-js/sha256"
 const isLoginView = inject<Ref<boolean>>("isLoginView");
 const registerForm = ref<RegisterForm>({
   account:"",
@@ -17,7 +17,7 @@ const registerForm = ref<RegisterForm>({
 });
 const $cookies = inject<VueCookies>("$cookies")!;
 async function register(){
-  let result = await api_register(registerForm.value.account, registerForm.value.pssswordRepeat, UserType.Patient)
+  let result = await api_register(registerForm.value.account,  Sha256(registerForm.value.password).toString(), UserType.Patient)
   if(result.data.code != 32){
       $cookies?.set("token",result.data.token,Date.now() + 7);
       await router.push("/user/home");
