@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import {computed} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-;
+
 
 const router = useRouter();
 const route = useRoute();
