@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import Header from './components/parts/Header.vue';
 import {House, User, Notification, PieChart, Clock} from '@element-plus/icons-vue';
-import {ref, inject, onMounted, provide} from 'vue';
+import {ref, inject} from 'vue';
 import {type VueCookies} from 'vue-cookies';
 import {useRoute, useRouter} from 'vue-router';
 import {getUserInfo, getUserSimpleInfo} from './api';
@@ -98,8 +98,6 @@ if ($cookies?.isKey("token")) {
   });
 
 }
-
-
 router.replace("/user/home");
 </script>
 
