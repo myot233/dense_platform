@@ -4,6 +4,9 @@ import {Key, User} from "@element-plus/icons-vue";
 import {inject, ref, type Ref} from "vue";
 import {type RegisterForm} from ".."
 import {UserType} from "@/common";
+import {register as api_register} from "@/api";
+import type {VueCookies} from "vue-cookies";
+import router from "@/router";
 
 const isLoginView = inject<Ref<boolean>>("isLoginView");
 const registerForm = ref<RegisterForm>({
@@ -12,9 +15,13 @@ const registerForm = ref<RegisterForm>({
   password:"",
   pssswordRepeat:""
 });
-
+const $cookies = inject<VueCookies>("$cookies")!;
 async function register(){
-    
+  let result = await api_register(registerForm.value.account, registerForm.value.pssswordRepeat, UserType.Patient)
+  if(result.data.code != 32){
+      $cookies?.set("token",result.data.token,Date.now() + 7);
+      await router.push("/user/home");
+  }
 }
 
 </script>
@@ -39,7 +46,7 @@ async function register(){
     </el-form-item>
   </el-form>
   <div class="grid md:grid-cols-2 w-full max-md:grid-rows-2 gap-2">
-    <el-button type="primary">注册</el-button>
+    <el-button type="primary" @click="">注册</el-button>
     <el-button @click="isLoginView = true  ">返回</el-button>
   </div>
 </template>
